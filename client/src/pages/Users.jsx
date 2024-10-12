@@ -5,6 +5,9 @@ import { IoMdAdd } from "react-icons/io";
 import { summary } from "../assets/data";
 import { getInitials } from "../utils";
 import clsx from "clsx";
+import AddUser from "../components/AddUser";
+import UserAction from "../components/Dialogs";
+import ConfirmationDialog from "../components/Dialogs";
 const Users = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
@@ -70,14 +73,14 @@ const Users = () => {
           className='text-blue-600 hover:text-blue-500 font-semibold sm:px-0'
           label='Edit'
           type='button'
-          // onClick={() => editClick(user)}
+          onClick={() => editClick(user)}
         />
 
         <Button
           className='text-red-700 hover:text-red-500 font-semibold sm:px-0'
           label='Delete'
           type='button'
-          // onClick={() => deleteClick(user?._id)}
+          onClick={() => deleteClick(user?._id)}
         />
       </td>
     </tr>
@@ -110,14 +113,14 @@ const Users = () => {
         </div>
       </div>
 
-      {/* <AddUser
+      <AddUser
         open={open}
         setOpen={setOpen}
         userData={selected}
         key={new Date().getTime().toString()}
       />
 
-      <ConfirmatioDialog
+      <ConfirmationDialog
         open={openDialog}
         setOpen={setOpenDialog}
         onClick={deleteHandler}
@@ -127,7 +130,7 @@ const Users = () => {
         open={openAction}
         setOpen={setOpenAction}
         onClick={userActionHandler}
-      /> */}
+      />
     </>
   );
 };
