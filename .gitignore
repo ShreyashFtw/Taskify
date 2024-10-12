@@ -2,3 +2,4 @@ node_modules/
 dist/
 .env
 .vscode/
+client/node_modules/
