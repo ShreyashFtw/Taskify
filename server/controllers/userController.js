@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       isAdmin,
-      role ,
+      role,
       title,
     });
 
@@ -130,8 +130,8 @@ export const updateUserProfile = async (req, res) => {
       isAdmin && userId === _id
         ? userId
         : isAdmin && userId !== _id
-        ? _id
-        : userId;
+          ? _id
+          : userId;
 
     const user = await User.findById(id);
 
@@ -218,15 +218,14 @@ export const activateUserProfile = async (req, res) => {
     const user = await User.findById(id);
 
     if (user) {
-      user.isActive = req.body.isActive; 
+      user.isActive = req.body.isActive;
 
       await user.save();
 
       res.status(201).json({
         status: true,
-        message: `User account has been ${
-          user?.isActive ? "activated" : "disabled"
-        }`,
+        message: `User account has been ${user?.isActive ? "activated" : "disabled"
+          }`,
       });
     } else {
       res.status(404).json({ status: false, message: "User not found" });
