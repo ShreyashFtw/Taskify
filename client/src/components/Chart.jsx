@@ -10,14 +10,13 @@ import {
   Label,
 } from "recharts";
 import { BarChart, Bar } from "recharts";
-import { chartData } from "../assets/data";
 
-export const Chart = () => {
+export const Chart = ({data}) => {
   return (
     <div className="flex flex-col md:flex-row md:w-1/2justify-between w-full h-[530px] p-2">
       <ResponsiveContainer className="md:w-1/2 h-full">
         <AreaChart
-          data={chartData}
+          data={data}
           margin={{
             top: 10,
             right: 30,
@@ -49,7 +48,7 @@ export const Chart = () => {
 
       <ResponsiveContainer className="md:w-1/2 h-full mt-4 md:mt-0">
         <BarChart
-          data={chartData}
+          data={data}
           margin={{
             top: 10,
             right: 30,
