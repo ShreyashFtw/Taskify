@@ -1,22 +1,71 @@
-import {apiSlice} from "../apiSlice";
-const TASK_URL ="/api/task"
+import { apiSlice } from "../apiSlice";
+const TASK_URL = "/api/task"
 export const taskApiSlice = apiSlice.injectEndpoints({
-    endpoints : (builder) => ({
-        getDashboardStats:builder.query({
+    endpoints: (builder) => ({
+        getDashboardStats: builder.query({
             query: () => ({
                 url: `${TASK_URL}/dashboard`,  // Update this line
                 method: "GET",
                 credentials: "include",
             }),
         }),
-        getAllTask:builder.query({
-            query: ({strQuery ,isTrashed , search}) => ({
+        getAllTask: builder.query({
+            query: ({ strQuery, isTrashed, search }) => ({
                 url: `${TASK_URL}?stage=${strQuery}&isTrashed=${isTrashed}&search=${search}`,  // Update this line
                 method: "GET",
                 credentials: "include",
             }),
-        })
-    })
+        }),
+        createTask: builder.mutation({
+            query: (data) => ({
+                url: `${TASK_URL}/create`,  // Update this line
+                method: "POST",
+                body: data,
+                credentials: "include",
+            }),
+        }),
+        duplicateTask: builder.mutation({
+            query: (id) => ({
+                url: `${TASK_URL}/duplicate/${id}`,  // Update this line
+                method: "POST",
+                body: {},
+                credentials: "include",
+            }),
+        }),
+        updateTask: builder.mutation({
+            query: ({ _id, ...data }) => {  // Destructure _id
+                if (!_id) throw new Error("Task ID is required for updating");
+                return {
+                    url: `${TASK_URL}/update/${_id}`,
+                    method: "PUT",
+                    body: data,
+                    credentials: "include",
+                };
+            },
+        }),
+        
+        
+        trashtask: builder.mutation({
+            query: (id) => ({
+                url: `${TASK_URL}/trash/${id}`,  // Update this line
+                method: "PUT",
+                credentials: "include",
+            }),
+        }),
+        deleteTask: builder.mutation({
+            query: (id) => ({
+                url: `${TASK_URL}/${id}`,  // Update this line
+                method: "DELETE",
+                credentials: "include",
+            }),
+        }),
+
+    }),
+
 });
 
-export const {useGetDashboardStatsQuery , useGetAllTaskQuery} = taskApiSlice;
+export const { useGetDashboardStatsQuery, useGetAllTaskQuery
+    , useCreateTaskMutation, useDuplicateTaskMutation
+    , useUpdateTaskMutation, useTrashtaskMutation,
+    useDeleteTaskMutation,
+} = taskApiSlice;
