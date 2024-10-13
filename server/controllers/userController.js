@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       isAdmin,
-      role,
+      role ,
       title,
     });
 

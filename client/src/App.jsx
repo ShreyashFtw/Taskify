@@ -14,6 +14,7 @@ import { setOpenSidebar } from "./redux/slices/authSlice";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { IoClose } from "react-icons/io5";
+import Register from "./pages/Register";
 
 
 
@@ -108,6 +109,8 @@ function App() {
         </Route>
 
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} /> {/* Add the registration route */}
+
       </Routes>
 
       <Toaster richColors />

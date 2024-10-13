@@ -18,21 +18,19 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login ,{isLoading}] = useLoginMutation();
-
+  const [login, { isLoading }] = useLoginMutation();
 
   const submitHandler = async (data) => {
-    try{
+    try {
       const result = await login(data).unwrap();
       console.log(result);
-      
-    }
-    catch(error){
+      dispatch(setCredentials(result));
+      navigate("/dashboard");
+    } catch (error) {
       console.log(error);
       toast.error(error?.data?.message || error.message);
     }
   };
-  
 
   useEffect(() => {
     user && navigate("/dashboard");
@@ -129,6 +127,12 @@ const Login = () => {
               />
             </div>
           </form>
+          <span
+            className="text-sm text-gray-500 hover:text-blue-400 hover:underline cursor-pointer"
+            onClick={() => navigate("/register")}
+          >
+            Don't have an account? Register here.
+          </span>
         </div>
       </div>
     </div>
