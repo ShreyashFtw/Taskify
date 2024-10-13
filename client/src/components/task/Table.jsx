@@ -13,8 +13,11 @@ import { FaList } from "react-icons/fa";
 import UserInfo from "../UserInfo";
 import Button from "../Button";
 import ConfirmationDialog from "../Dialogs";
+import AddTask from "./AddTask";
+
 
 import { useTrashtaskMutation } from "../../redux/slices/api/taskApiSlice";
+
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -25,12 +28,19 @@ const ICONS = {
 const Table = ({ tasks }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+
 
   const [trashtask] = useTrashtaskMutation();
 
   const deleteClicks = (id) => {
     setSelected(id);
     setOpenDialog(true);
+  };
+
+  const editTaskHandler = (el) => {
+    setSelected(el);
+    setOpenEdit(true);
   };
 
   const deleteHandler = async () => {
@@ -127,6 +137,7 @@ const Table = ({ tasks }) => {
           className='text-blue-600 hover:text-blue-500 sm:px-0 text-sm md:text-base'
           label='Edit'
           type='button'
+          onClick={() => editTaskHandler(task)}
         />
 
         <Button
@@ -158,6 +169,12 @@ const Table = ({ tasks }) => {
         open={openDialog}
         setOpen={setOpenDialog}
         onClick={deleteHandler}
+      />
+      <AddTask
+        open={openEdit}
+        setOpen={setOpenEdit}
+        task={selected}
+        key={new Date().getTime()}
       />
     </>
   );
