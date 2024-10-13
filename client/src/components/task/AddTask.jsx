@@ -56,7 +56,7 @@ const AddTask = ({ open, setOpen, task }) => {
   const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation();
   const URLS = task?.assets ? [...task.assets] : [];
 
-  console.log("Current Task:", task);
+  // console.log("Current Task:", task);
   
   const submitHandler = async (data) => {
     for (const files of assets) {
@@ -78,7 +78,7 @@ const AddTask = ({ open, setOpen, task }) => {
         stage,
         priority,
       };
-      console.log("Current Task ID:", task?._id);
+      // console.log("Current Task ID:", task?._id);
         
       // Check if task exists before updating
       const res = task?._id
@@ -86,7 +86,7 @@ const AddTask = ({ open, setOpen, task }) => {
           : await createTask(newData).unwrap();
   
 
-      toast.success(res.message);
+      toast.success("Task edited successfully");
 
       setTimeout(() => {
         setOpen(false);
