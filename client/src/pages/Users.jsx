@@ -5,28 +5,60 @@ import { IoMdAdd } from "react-icons/io";
 import { getInitials } from "../utils";
 import clsx from "clsx";
 import AddUser from "../components/AddUser";
-import UserAction from "../components/Dialogs";
+import {UserAction} from "../components/Dialogs";
 import ConfirmationDialog from "../components/Dialogs";
 import {
   useGetTeamListQuery,
   useDeleteUserMutation,
   useUserActionMutation,
 } from "../redux/slices/api/userApiSlice";
+import { toast } from "sonner";
 const Users = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const [openAction, setOpenAction] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const { data, isLoading } = useGetTeamListQuery();
+  const { data, isLoading ,refetch } = useGetTeamListQuery();
 
   console.log(data);
 
   const [deleteUser] = useDeleteUserMutation();
   const [userAction] = useUserActionMutation();
 
-  const userActionHandler = () => {};
-  const deleteHandler = () => {};
+  const userActionHandler = async () => {
+    try{
+      const result = await userAction({
+        isActive: !selected?.isActive,
+        id: selected?._id
+      })
+      refetch();
+      toast.success(result?.data?.message);
+      setSelected(null);
+      setTimeout(() => {
+        setOpenAction(false);
+      },500)
+    }
+    catch(err){
+      console.log(err);
+      toast.error(err?.data?.message || err.message);
+    }
+  };
+  const deleteHandler = async () => {
+    try{
+      const result = await deleteUser(selected);
+      refetch();
+      toast.success("Deleted successfully");
+      setSelected(null);
+      setTimeout(() => {
+        setOpenDialog(false);
+      },500)
+    }
+    catch(err){
+      console.log(err);
+      toast.error(err?.data?.message || err.message);
+    }
+  };
 
   const deleteClick = (id) => {
     setSelected(id);
@@ -37,6 +69,11 @@ const Users = () => {
     setSelected(el);
     setOpen(true);
   };
+
+  const userStatusClick = (el) => {
+    setSelected(el);
+    setOpenAction(true);
+  };  
 
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
@@ -65,11 +102,11 @@ const Users = () => {
 
       <td className="p-2">{user.title}</td>
       <td className="p-2">{user.email || "user.emal.com"}</td>
-      <td className="p-2">{user.role}</td>
+      <td className="p-2">{user?.role}</td>
 
       <td>
         <button
-          // onClick={() => userStatusClick(user)}
+          onClick={() => userStatusClick(user)}
           className={clsx(
             "w-fit px-4 py-1 rounded-full",
             user?.isActive ? "bg-blue-200" : "bg-yellow-100"
@@ -135,6 +172,7 @@ const Users = () => {
         open={openDialog}
         setOpen={setOpenDialog}
         onClick={deleteHandler}
+
       />
 
       <UserAction

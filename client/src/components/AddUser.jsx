@@ -10,6 +10,7 @@ import { useRegisterMutation } from "../redux/slices/api/authApiSlice";
 import { useUpdateUserMutation } from "../redux/slices/api/userApiSlice";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
+import { setCredentials } from "../redux/slices/authSlice";
 
 const AddUser = ({ open, setOpen, userData }) => {
   let defaultValues = userData ?? {};
@@ -25,25 +26,27 @@ const AddUser = ({ open, setOpen, userData }) => {
   const dispatch = useDispatch();
 
   const [addNewUser , {isLoading}] = useRegisterMutation();
-  const [updateUser ,{isLoading:isUpdating}] = useUpdateUserMutation();
+  const [updateUser ,{isLoading : isUpdating}] = useUpdateUserMutation();
 
   const handleOnSubmit = async(data) => {
     try{
       if(userData){
         const result = await updateUser(data).unwrap();
-        toast.success(result?.message);
-        if(userData?._id === user>_id){
+        toast.success("Profile updated successfully");
+        if(userData?._id === user._id) {
           dispatch(setCredentials({...result.user}));
         }
 
       }else{
-        const result = await addNewUser({...data ,password : data.email}).unwrap();
+        await addNewUser({...data ,password : data.email}).unwrap();
         toast.success("New user added successfully");
       }setTimeout(() => {
         setOpen(false);
-      },1500)
+      },500)
     }
     catch(err){
+      console.log(err);
+      
       toast.error("Something went wrong. Please try again later.");
     }
   }

@@ -28,6 +28,32 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `${USER_URL}/${data.id}`,  // Update this line
                 method: "PUT",
+                body: data,
+                credentials: "include",
+            }),
+        }),
+        getNotifications: builder.query({
+            query: () => ({
+                url: `${USER_URL}/notifications`,  // Update this line
+                method: "GET",
+                credentials: "include",
+            }),
+        }),
+
+        markNotiasRead: builder.mutation({
+            query: (data) => ({
+                url: `${USER_URL}/read-noti?isReadType=${data.type}&id=${data.id}`,  // Update this line
+                method: "PUT",
+                body: data,
+                credentials: "include",
+            }),
+        }),
+
+        changePassword : builder.mutation({
+            query: (data) => ({
+                url: `${USER_URL}/change-password`,  // Update this line
+                method: "PUT",
+                body: data,
                 credentials: "include",
             }),
         }),
@@ -35,4 +61,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useUpdateUserMutation , useGetTeamListQuery , useDeleteUserMutation , useUserActionMutation} = authApiSlice;
+export const {useUpdateUserMutation , useGetTeamListQuery , useDeleteUserMutation , useUserActionMutation
+    , useGetNotificationsQuery , useMarkNotiasReadMutation , useChangePasswordMutation
+} = authApiSlice;
