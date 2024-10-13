@@ -1,12 +1,12 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../redux/slices/authSlice";
+import { useLoginMutation } from "../redux/slices/api/authApiSlice";
+import { toast } from "sonner";
 
 const Login = () => {
   const { user } = useSelector((state) => state.auth);
@@ -18,14 +18,18 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [login ,{isLoading}] = useLoginMutation();
+
+
   const submitHandler = async (data) => {
-    // Dummy login check
-    if (data.email === "shreyash1@gmail.com" && data.password === "123456") {
-      const userData = { email: data.email }; // You can add more user info here if needed
-      dispatch(setCredentials(userData)); // Store user info in Redux
-      navigate("/dashboard"); // Navigate to dashboard after login
-    } else {
-      alert("Invalid email or password"); // Handle invalid login
+    try{
+      const result = await login(data).unwrap();
+      console.log(result);
+      
+    }
+    catch(error){
+      console.log(error);
+      toast.error(error?.data?.message || error.message);
     }
   };
   

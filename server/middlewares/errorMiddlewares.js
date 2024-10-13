@@ -13,7 +13,7 @@ const errorHandler = (error, req, res, next) => {
         message = "Resource not found - Invalid ID";
 
     }
-req.status(statusCode).json({
+res.status(statusCode).json({
     message: message,
     stack: process.env.NODE_ENV === "production" ? null : error.stack,
 });

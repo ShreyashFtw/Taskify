@@ -31,3 +31,5 @@ router
   .route("/:id")
   .put(protectRoute, isAdminRoute, activateUserProfile)
   .delete(protectRoute, isAdminRoute, deleteUserProfile);
+
+export default router;
