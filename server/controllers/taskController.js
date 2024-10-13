@@ -152,7 +152,7 @@ export const dashboardStatistics = async (req, res) => {
       .sort({ _id: -1 });
 
     //   group task by stage and calculate counts
-    const groupTaskks = allTasks.reduce((result, task) => {
+    const groupTasks = allTasks.reduce((result, task) => {
       const stage = task.stage;
 
       if (!result[stage]) {
@@ -164,7 +164,7 @@ export const dashboardStatistics = async (req, res) => {
       return result;
     }, {});
 
-    // Group tasks by priority
+    // Group tasks  priority and calculate counts
     const groupData = Object.entries(
       allTasks.reduce((result, task) => {
         const { priority } = task;
@@ -182,7 +182,7 @@ export const dashboardStatistics = async (req, res) => {
       totalTasks,
       last10Task,
       users: isAdmin ? users : [],
-      tasks: groupTaskks,
+      tasks: groupTasks,
       graphData: groupData,
     };
 
