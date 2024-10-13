@@ -47,7 +47,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         
         trashtask: builder.mutation({
             query: (id) => ({
-                url: `${TASK_URL}/trash/${id}`,  // Update this line
+                url: `${TASK_URL}/${id}`,  // Update this line
                 method: "PUT",
                 credentials: "include",
             }),

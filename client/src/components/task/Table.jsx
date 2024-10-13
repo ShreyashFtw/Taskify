@@ -14,6 +14,8 @@ import UserInfo from "../UserInfo";
 import Button from "../Button";
 import ConfirmationDialog from "../Dialogs";
 
+import { useTrashtaskMutation } from "../../redux/slices/api/taskApiSlice";
+
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
   medium: <MdKeyboardArrowUp />,
@@ -24,16 +26,30 @@ const Table = ({ tasks }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selected, setSelected] = useState(null);
 
+  const [trashtask] = useTrashtaskMutation();
+
   const deleteClicks = (id) => {
     setSelected(id);
     setOpenDialog(true);
   };
 
-  const deleteHandler = () => {};
+  const deleteHandler = async () => {
+    try {
+      const result = await trashtask(selected).unwrap(); // Pass selected directly
+      toast.success(result?.message);
+      setTimeout(() => {
+        setOpenDialog(false);
+        window.location.reload(); // Consider using state to update tasks instead
+      }, 500);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data?.message || err.message);
+    }
+  };
 
   const TableHeader = () => (
     <thead className='w-full border-b border-gray-300'>
-      <tr className='w-full text-black  text-left'>
+      <tr className='w-full text-black text-left'>
         <th className='py-2'>Task Title</th>
         <th className='py-2'>Priority</th>
         <th className='py-2 line-clamp-1'>Created At</th>
@@ -122,11 +138,12 @@ const Table = ({ tasks }) => {
       </td>
     </tr>
   );
+
   return (
     <>
-      <div className='bg-white  px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
+      <div className='bg-white px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
         <div className='overflow-x-auto'>
-          <table className='w-full '>
+          <table className='w-full'>
             <TableHeader />
             <tbody>
               {tasks.map((task, index) => (
@@ -137,7 +154,6 @@ const Table = ({ tasks }) => {
         </div>
       </div>
 
-      {/* TODO */}
       <ConfirmationDialog
         open={openDialog}
         setOpen={setOpenDialog}
