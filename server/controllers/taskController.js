@@ -305,11 +305,18 @@ export const updateTask = async (req, res) => {
 export const trashTask = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Received ID:', id); // Log the received ID
 
     const task = await Task.findById(id);
 
-    task.isTrashed = true;
+    if (!task) {
+      return res.status(404).json({
+        status: false,
+        message: 'Task not found.',
+      });
+    }
 
+    task.isTrashed = true;
     await task.save();
 
     res.status(200).json({

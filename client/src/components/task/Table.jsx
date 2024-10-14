@@ -42,20 +42,23 @@ const Table = ({ tasks }) => {
     setSelected(el);
     setOpenEdit(true);
   };
-
   const deleteHandler = async () => {
     try {
-      const result = await trashtask(selected).unwrap(); // Pass selected directly
+      if (!selected) {
+        throw new Error("No task selected for deletion");
+      }
+      const result = await trashtask({ id: selected, isTrashed: true }).unwrap();
       toast.success(result?.message);
       setTimeout(() => {
         setOpenDialog(false);
-        window.location.reload(); // Consider using state to update tasks instead
+        window.location.reload();
       }, 500);
     } catch (err) {
       console.log(err);
       toast.error(err?.data?.message || err.message);
     }
   };
+  
 
   const TableHeader = () => (
     <thead className='w-full border-b border-gray-300'>
