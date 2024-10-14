@@ -1,3 +1,4 @@
+import { postTaskActivity } from "../../../../../server/controllers/taskController";
 import { apiSlice } from "../apiSlice";
 const TASK_URL = "/api/task"
 export const taskApiSlice = apiSlice.injectEndpoints({
@@ -67,6 +68,21 @@ export const taskApiSlice = apiSlice.injectEndpoints({
                 credentials: 'include', // Use credentials if needed for cookies, etc.
             }),
         }),
+        getSingleTask: builder.query({
+            query: (id) => ({
+                url: `${TASK_URL}/${id}`,  // Update this line
+                method: "GET",
+                credentials: "include",
+            }),
+        }),
+        postTaskActivity    : builder.mutation({
+            query: ({data ,id}) => ({
+                url: `${TASK_URL}/activity/${id}`,  // Update this line
+                method: "POST",
+                body: data,
+                credentials: "include",
+            }),
+        })
 
     }),
 
@@ -75,5 +91,6 @@ export const taskApiSlice = apiSlice.injectEndpoints({
 export const { useGetDashboardStatsQuery, useGetAllTaskQuery
     , useCreateTaskMutation, useDuplicateTaskMutation
     , useUpdateTaskMutation, useTrashtaskMutation,
-    useDeleteTaskMutation, useCreateSubTaskMutation
+    useDeleteTaskMutation, useCreateSubTaskMutation,
+    useGetSingleTaskQuery, usePostTaskActivityMutation
 } = taskApiSlice;
