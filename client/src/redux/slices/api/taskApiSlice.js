@@ -1,4 +1,3 @@
-import { postTaskActivity } from "../../../../../server/controllers/taskController";
 import { apiSlice } from "../apiSlice";
 const TASK_URL = "/api/task"
 export const taskApiSlice = apiSlice.injectEndpoints({
@@ -44,22 +43,25 @@ export const taskApiSlice = apiSlice.injectEndpoints({
                 };
             },
         }),
-        
-        
+
+
         trashtask: builder.mutation({
-            query: (id) => ({
-                url: `${TASK_URL}/${id}`,  // Update this line
-                method: "PUT",
-                credentials: "include",
+            query: ({ id, isTrashed }) => ({
+              url: `${TASK_URL}/${id}`, // Using the task ID directly
+              method: "PUT",
+              body: { isTrashed }, // Include the body if needed
+              credentials: "include",
             }),
-        }),
+          }),
+          
         deleteTask: builder.mutation({
             query: (id) => ({
-                url: `${TASK_URL}/${id}`,  // Update this line
+                url: `${TASK_URL}/${id}`, // This should be correct
                 method: "DELETE",
                 credentials: "include",
             }),
         }),
+        
         createSubTask: builder.mutation({
             query: ({ data, id }) => ({
                 url: `${TASK_URL}/create-subtask/${id}`, // Confirm this URL is correct
@@ -75,15 +77,22 @@ export const taskApiSlice = apiSlice.injectEndpoints({
                 credentials: "include",
             }),
         }),
-        postTaskActivity    : builder.mutation({
-            query: ({data ,id}) => ({
+        postTaskActivity: builder.mutation({
+            query: ({ data, id }) => ({
                 url: `${TASK_URL}/activity/${id}`,  // Update this line
                 method: "POST",
                 body: data,
                 credentials: "include",
             }),
-        })
+        }),
+        deleteRestoreTask: builder.mutation({
+            query: ({ id, actionType }) => ({
+                url: `${TASK_URL}/delete-restore/${id}?actionType=${actionType}`,  // Update this line
+                method: "DELETE",
+                credentials: "include",
+            }),
 
+        }),
     }),
 
 });
@@ -93,4 +102,5 @@ export const { useGetDashboardStatsQuery, useGetAllTaskQuery
     , useUpdateTaskMutation, useTrashtaskMutation,
     useDeleteTaskMutation, useCreateSubTaskMutation,
     useGetSingleTaskQuery, usePostTaskActivityMutation
+    , useDeleteRestoreTaskMutation
 } = taskApiSlice;

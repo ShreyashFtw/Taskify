@@ -9,8 +9,10 @@ import { Menu, Transition } from "@headlessui/react";
 import AddTask from "./AddTask";
 import AddSubTask from "./AddSubTask";
 import ConfirmationDialog from "../Dialogs";
-import { useDeleteTaskMutation, useDuplicateTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import { useDuplicateTaskMutation, useTrashtaskMutation } from "../../redux/slices/api/taskApiSlice";
 import { toast } from "sonner";
+
+
 const TaskDialog = ({ task }) => {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -18,7 +20,7 @@ const TaskDialog = ({ task }) => {
 
   const navigate = useNavigate();
 
-  const [deleteTask] = useDeleteTaskMutation();
+  const [deleteTask] = useTrashtaskMutation();
   const[duplicateTask] = useDuplicateTaskMutation();
 
   const duplicateHandler = async() => {
@@ -38,10 +40,12 @@ const TaskDialog = ({ task }) => {
   const deleteClicks = () => {
     setOpenDialog(true);
   };
+  console.log("Deleting task ID:", task._id); // This should log a string ID
+
   const deleteHandler = async() => {
-    try{
+    try {
       const res = await deleteTask({
-        id: task._id,
+        id: task._id,  // Make sure task._id is a string
         isTrashed: "trash",
       }).unwrap();
       toast.success(res?.message);
